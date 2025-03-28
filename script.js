@@ -15,9 +15,10 @@ let snake, apple, direction, gameLoop;
 
 // Images (you'll need to replace these with actual image URLs or base64 encoded images)
 const blockImage = new Image();
-blockImage.src = 'block.jpg';
+blockImage.src = 'https://media-hosting.imagekit.io/7f8347e0227b446d/block.jpg?Expires=1837728906&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=p6gIdzd~iG0Efy1PrPf3aVSa4Oazn659MTRjhnFRtit4KQQA8RgCmvfcwJUqK46j4ruk3NjRCg-igbUAmNrUvDmNOcdisH1vj8V~6rPIJbjuSK4yFqX2ggVBDiPxppv6Kmc2ohCKP6IH-Xg9IXVFHp9CNEikEW2uZv-HULQsfoFQlUjoszDme8we~uTBsslyWbehtfzOSr~QA~8yVLViHD94CiS8JvTd5OXiZ~WvVOoGcOIyzZlo3PL7Ukhy3UbkgVdXKkiFr-AnmCrX-McRUWb0GFu5~SPpj~fdB0j5rjLtLY4igCYCNRiRWcJr-1G04NlZssqZgliHND56UUAP1Q__';
 const appleImage = new Image();
-appleImage.src = 'apple.jpg';
+appleImage.src = 'https://media-hosting.imagekit.io/025684e9aa5c474c/apple.jpg?Expires=1837728943&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=CLG-dXcma79EIl95Ot5D926nWPVONqjjzADpbTFILLUjW6nlVv2~XbtDMiJQKKvR6ANOolB2ug3epeVlvsWGZYLt-~D9UiCQAgRmDiHMZ6sQTmt9Wq1WvZINMa4N9XQFfxS0d1RV3cT9j~m1HXv9vLjnixPuoTzMXJwRpPXUyIJ3rwbm8PitqAnkRev3XV7jlcqcaNhvrXHeF0gEu~8CMZSe8USeTHYR1GGZft2h4bPCrmkqFx2QNaN~A7-FxA8x4~jB6J4~giThkmaz35zcg3uBtl2kdthWtg9yCIWBZkwBkfbPI1dvgEo7667S~qwZtJrdyQe84hlVsu580yNi2Q__
+    ';
 
 function initGame() {
     snake = {
