@@ -1,91 +1,155 @@
-/* Body and Canvas settings */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #34495e;
-    font-family: 'Arial', sans-serif;
-    color: #ecf0f1;
-    box-sizing: border-box;
-    overflow: hidden;
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
+const gameOverElement = document.getElementById('game-over');
+const finalScoreElement = document.getElementById('final-score');
+
+// Game constants
+const SIZE = 40;
+const CANVAS_WIDTH = 1000;
+const CANVAS_HEIGHT = 800;
+
+// Game state
+let snake, apple, direction, gameLoop;
+
+// Images (you'll need to replace these with actual image URLs or base64 encoded images)
+const blockImage = new Image();
+blockImage.src = 'block.jpg';
+const appleImage = new Image();
+appleImage.src = 'apple.jpg';
+
+function initGame() {
+    snake = {
+        length: 1,
+        x: [40],
+        y: [40],
+        direction: 'down'
+    };
+    
+    apple = {
+        x: 120,
+        y: 120
+    };
+
+    direction = 'down';
+    scoreElement.textContent = `Score: ${snake.length}`;
+    gameOverElement.style.display = 'none';
 }
 
-/* Canvas settings */
-canvas {
-    border: 5px solid #2980b9;
-    background-color: #7f8c8d;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 600px; /* Ensure it's responsive on both phones and desktops */
-    height: auto;
+function drawBackground() {
+    ctx.fillStyle = 'rgb(110, 110, 5)';
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
-/* Score display */
-#score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ecf0f1;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-/* Game Over display */
-#game-over {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 10px;
-    color: #ecf0f1;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-}
-
-/* Button styling */
-#game-over button {
-    padding: 12px 25px;
-    font-size: 18px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-/* Hover effect for the restart button */
-#game-over button:hover {
-    background-color: #2980b9;
-}
-
-/* Responsive design for mobile (iPhone 13, etc.) */
-@media (max-width: 500px) {
-    canvas {
-        width: 90%; /* Take up 90% of the width of the screen */
-        height: auto;
-        max-width: 400px; /* Limit max width for smaller screens */
-    }
-
-    #score {
-        font-size: 16px; /* Adjust font size for smaller screens */
-        top: 5px;
-        left: 5px;
-    }
-
-    #game-over {
-        width: 80%;
-        padding: 15px;
-    }
-
-    #game-over button {
-        font-size: 16px;
-        padding: 10px 20px;
+function drawSnake() {
+    for (let i = 0; i < snake.length; i++) {
+        ctx.drawImage(blockImage, snake.x[i], snake.y[i]);
     }
 }
+
+function drawApple() {
+    ctx.drawImage(appleImage, apple.x, apple.y);
+}
+
+function moveSnake() {
+    // Update body
+    for (let i = snake.length - 1; i > 0; i--) {
+        snake.x[i] = snake.x[i-1];
+        snake.y[i] = snake.y[i-1];
+    }
+
+    // Update head
+    switch (snake.direction) {
+        case 'left':
+            snake.x[0] -= SIZE;
+            break;
+        case 'right':
+            snake.x[0] += SIZE;
+            break;
+        case 'up':
+            snake.y[0] -= SIZE;
+            break;
+        case 'down':
+            snake.y[0] += SIZE;
+            break;
+    }
+}
+
+function checkCollision() {
+    // Check apple collision
+    if (isCollision(snake.x[0], snake.y[0], apple.x, apple.y)) {
+        snake.length++;
+        snake.x.push(-1);
+        snake.y.push(-1);
+        moveApple();
+        scoreElement.textContent = `Score: ${snake.length}`;
+    }
+
+    // Check self collision
+    for (let i = 3; i < snake.length; i++) {
+        if (isCollision(snake.x[0], snake.y[0], snake.x[i], snake.y[i])) {
+            endGame();
+        }
+    }
+
+    // Check boundary collision
+    if (snake.x[0] < 0 || snake.x[0] >= CANVAS_WIDTH || 
+        snake.y[0] < 0 || snake.y[0] >= CANVAS_HEIGHT) {
+        endGame();
+    }
+}
+
+function isCollision(x1, y1, x2, y2) {
+    return x1 < x2 + SIZE && x1 + SIZE > x2 &&
+           y1 < y2 + SIZE && y1 + SIZE > y2;
+}
+
+function moveApple() {
+    apple.x = Math.floor(Math.random() * 25) * SIZE;
+    apple.y = Math.floor(Math.random() * 20) * SIZE;
+}
+
+function gameUpdate() {
+    drawBackground();
+    moveSnake();
+    checkCollision();
+    drawSnake();
+    drawApple();
+}
+
+function endGame() {
+    clearInterval(gameLoop);
+    finalScoreElement.textContent = `Score: ${snake.length}`;
+    gameOverElement.style.display = 'block';
+}
+
+function restartGame() {
+    initGame();
+    startGame();
+}
+
+function startGame() {
+    gameLoop = setInterval(gameUpdate, 250);
+}
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+    switch(e.key) {
+        case 'ArrowLeft':
+            if (snake.direction !== 'right') snake.direction = 'left';
+            break;
+        case 'ArrowRight':
+            if (snake.direction !== 'left') snake.direction = 'right';
+            break;
+        case 'ArrowUp':
+            if (snake.direction !== 'down') snake.direction = 'up';
+            break;
+        case 'ArrowDown':
+            if (snake.direction !== 'up') snake.direction = 'down';
+            break;
+    }
+});
+
+// Initialize and start the game
+initGame();
+startGame();
