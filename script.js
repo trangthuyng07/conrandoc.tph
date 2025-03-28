@@ -7,19 +7,19 @@ const finalScoreElement = document.getElementById('final-score');
 
 // Game constants
 const SIZE = 40;
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 600;
+const CANVAS_WIDTH = 1000;
+const CANVAS_HEIGHT = 800;
 
 // Game state
 let snake, apple, direction, gameLoop;
 
-// Images (you'll need to replace these with actual image URLs or base64 encoded images)
+// Load images
 const blockImage = new Image();
-blockImage.src = 'https://media-hosting.imagekit.io/7f8347e0227b446d/block.jpg?Expires=1837728906&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=p6gIdzd~iG0Efy1PrPf3aVSa4Oazn659MTRjhnFRtit4KQQA8RgCmvfcwJUqK46j4ruk3NjRCg-igbUAmNrUvDmNOcdisH1vj8V~6rPIJbjuSK4yFqX2ggVBDiPxppv6Kmc2ohCKP6IH-Xg9IXVFHp9CNEikEW2uZv-HULQsfoFQlUjoszDme8we~uTBsslyWbehtfzOSr~QA~8yVLViHD94CiS8JvTd5OXiZ~WvVOoGcOIyzZlo3PL7Ukhy3UbkgVdXKkiFr-AnmCrX-McRUWb0GFu5~SPpj~fdB0j5rjLtLY4igCYCNRiRWcJr-1G04NlZssqZgliHND56UUAP1Q__';
+blockImage.src = 'https://media-hosting.imagekit.io/7f8347e0227b446d/block.jpg?Expires=1837728906&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=p6gIdzd~iG0Efy1PrPf3aVSa4Oazn659MTRjhnFRtit4KQQA8RgCmvfcwJUqK46j4ruk3NjRCg-igbUAmNrUvDmNOcdisH1vj8V~6rPIJbjuSK4yFqX2ggVBDiPxppv6Kmc2ohCKP6IH-Xg9IXVFHp9CNEikEW2uZv-HULQsfoFQlUjoszDme8we~uTBsslyWbehtfzOSr~QA~8yVLViHD94CiS8JvTd5OXiZ~WvVOoGcOIyzZlo3PL7Ukhy3UbkgVdXKkiFr-AnmCrX-McRUWb0GFu5~SPpj~fdB0j5rjLtLY4igCYCNRiRWcJr-1G04NlZssqZgliHND56UUAP1Q__'; // Place the image in a 'resources' folder
 const appleImage = new Image();
-appleImage.src = 'https://media-hosting.imagekit.io/025684e9aa5c474c/apple.jpg?Expires=1837728943&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=CLG-dXcma79EIl95Ot5D926nWPVONqjjzADpbTFILLUjW6nlVv2~XbtDMiJQKKvR6ANOolB2ug3epeVlvsWGZYLt-~D9UiCQAgRmDiHMZ6sQTmt9Wq1WvZINMa4N9XQFfxS0d1RV3cT9j~m1HXv9vLjnixPuoTzMXJwRpPXUyIJ3rwbm8PitqAnkRev3XV7jlcqcaNhvrXHeF0gEu~8CMZSe8USeTHYR1GGZft2h4bPCrmkqFx2QNaN~A7-FxA8x4~jB6J4~giThkmaz35zcg3uBtl2kdthWtg9yCIWBZkwBkfbPI1dvgEo7667S~qwZtJrdyQe84hlVsu580yNi2Q__
-    ';
+appleImage.src = 'https://media-hosting.imagekit.io/025684e9aa5c474c/apple.jpg?Expires=1837728943&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=CLG-dXcma79EIl95Ot5D926nWPVONqjjzADpbTFILLUjW6nlVv2~XbtDMiJQKKvR6ANOolB2ug3epeVlvsWGZYLt-~D9UiCQAgRmDiHMZ6sQTmt9Wq1WvZINMa4N9XQFfxS0d1RV3cT9j~m1HXv9vLjnixPuoTzMXJwRpPXUyIJ3rwbm8PitqAnkRev3XV7jlcqcaNhvrXHeF0gEu~8CMZSe8USeTHYR1GGZft2h4bPCrmkqFx2QNaN~A7-FxA8x4~jB6J4~giThkmaz35zcg3uBtl2kdthWtg9yCIWBZkwBkfbPI1dvgEo7667S~qwZtJrdyQe84hlVsu580yNi2Q__'; // Same for this image
 
+// Initialize the game state
 function initGame() {
     snake = {
         length: 1,
@@ -27,7 +27,7 @@ function initGame() {
         y: [40],
         direction: 'down'
     };
-    
+
     apple = {
         x: 120,
         y: 120
@@ -38,21 +38,25 @@ function initGame() {
     gameOverElement.style.display = 'none';
 }
 
+// Draw the background
 function drawBackground() {
     ctx.fillStyle = 'rgb(110, 110, 5)';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 }
 
+// Draw the snake
 function drawSnake() {
     for (let i = 0; i < snake.length; i++) {
         ctx.drawImage(blockImage, snake.x[i], snake.y[i]);
     }
 }
 
+// Draw the apple
 function drawApple() {
     ctx.drawImage(appleImage, apple.x, apple.y);
 }
 
+// Move the snake
 function moveSnake() {
     // Update body
     for (let i = snake.length - 1; i > 0; i--) {
@@ -77,6 +81,7 @@ function moveSnake() {
     }
 }
 
+// Check for collisions
 function checkCollision() {
     // Check apple collision
     if (isCollision(snake.x[0], snake.y[0], apple.x, apple.y)) {
@@ -101,16 +106,19 @@ function checkCollision() {
     }
 }
 
+// Helper function for checking collision
 function isCollision(x1, y1, x2, y2) {
     return x1 < x2 + SIZE && x1 + SIZE > x2 &&
            y1 < y2 + SIZE && y1 + SIZE > y2;
 }
 
+// Move the apple to a new location
 function moveApple() {
-    apple.x = Math.floor(Math.random() * 20) * SIZE;
-    apple.y = Math.floor(Math.random() * 15) * SIZE;
+    apple.x = Math.floor(Math.random() * 25) * SIZE;
+    apple.y = Math.floor(Math.random() * 20) * SIZE;
 }
 
+// Update the game every frame
 function gameUpdate() {
     drawBackground();
     moveSnake();
@@ -119,19 +127,22 @@ function gameUpdate() {
     drawApple();
 }
 
+// End the game and show the final score
 function endGame() {
     clearInterval(gameLoop);
     finalScoreElement.textContent = `Score: ${snake.length}`;
     gameOverElement.style.display = 'block';
 }
 
+// Restart the game
 function restartGame() {
     initGame();
     startGame();
 }
 
+// Start the game loop
 function startGame() {
-    gameLoop = setInterval(gameUpdate, 100);
+    gameLoop = setInterval(gameUpdate, 250);
 }
 
 // Keyboard controls
@@ -152,41 +163,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Add touch controls for mobile
-let touchStartX = 0;
-let touchStartY = 0;
-
-canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-});
-
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-
-    let touchMoveX = e.touches[0].clientX;
-    let touchMoveY = e.touches[0].clientY;
-
-    let diffX = touchMoveX - touchStartX;
-    let diffY = touchMoveY - touchStartY;
-
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX > 0 && snake.direction !== 'left') {
-            snake.direction = 'right';
-        } else if (diffX < 0 && snake.direction !== 'right') {
-            snake.direction = 'left';
-        }
-    } else {
-        if (diffY > 0 && snake.direction !== 'up') {
-            snake.direction = 'down';
-        } else if (diffY < 0 && snake.direction !== 'down') {
-            snake.direction = 'up';
-        }
-    }
-});
-
-// Start the game on page load
+// Initialize and start the game
 initGame();
 startGame();
