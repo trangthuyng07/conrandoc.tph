@@ -9,7 +9,7 @@ body {
     font-family: 'Arial', sans-serif;
     color: #ecf0f1;
     box-sizing: border-box;
-    overflow: hidden; /* To ensure no scrolling */
+    overflow: hidden;
 }
 
 /* Canvas settings */
@@ -18,7 +18,7 @@ canvas {
     background-color: #7f8c8d;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     width: 100%;
-    max-width: 500px; /* Limit width on large screens */
+    max-width: 600px; /* Ensure it's responsive on both phones and desktops */
     height: auto;
 }
 
@@ -65,22 +65,22 @@ canvas {
     background-color: #2980b9;
 }
 
-/* Make the game responsive on small screen sizes (like iPhone 13) */
-@media (max-width: 390px) {
+/* Responsive design for mobile (iPhone 13, etc.) */
+@media (max-width: 500px) {
     canvas {
-        width: 100%; /* Fit the screen width */
-        height: 70%; /* Set height proportional to screen size */
-        max-width: 400px; /* Set a maximum width */
+        width: 90%; /* Take up 90% of the width of the screen */
+        height: auto;
+        max-width: 400px; /* Limit max width for smaller screens */
     }
 
     #score {
-        font-size: 16px; /* Slightly smaller font size */
+        font-size: 16px; /* Adjust font size for smaller screens */
         top: 5px;
         left: 5px;
     }
 
     #game-over {
-        width: 80%; /* Ensure it doesn't overflow the screen */
+        width: 80%;
         padding: 15px;
     }
 
