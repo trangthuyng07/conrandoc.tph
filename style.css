@@ -1,4 +1,4 @@
-/* General body settings */
+/* Body and Canvas settings */
 body {
     display: flex;
     justify-content: center;
@@ -9,6 +9,7 @@ body {
     font-family: 'Arial', sans-serif;
     color: #ecf0f1;
     box-sizing: border-box;
+    overflow: hidden; /* To ensure no scrolling */
 }
 
 /* Canvas settings */
@@ -16,14 +17,17 @@ canvas {
     border: 5px solid #2980b9;
     background-color: #7f8c8d;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 500px; /* Limit width on large screens */
+    height: auto;
 }
 
 /* Score display */
 #score {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 24px;
+    top: 10px;
+    left: 10px;
+    font-size: 18px;
     font-weight: bold;
     color: #ecf0f1;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -38,7 +42,7 @@ canvas {
     transform: translate(-50%, -50%);
     text-align: center;
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
     color: #ecf0f1;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -61,17 +65,23 @@ canvas {
     background-color: #2980b9;
 }
 
-/* Make the game responsive on mobile */
-@media (max-width: 768px) {
+/* Make the game responsive on small screen sizes (like iPhone 13) */
+@media (max-width: 390px) {
     canvas {
-        width: 100%;
-        height: auto;
-        max-width: 400px;
+        width: 100%; /* Fit the screen width */
+        height: 70%; /* Set height proportional to screen size */
+        max-width: 400px; /* Set a maximum width */
+    }
+
+    #score {
+        font-size: 16px; /* Slightly smaller font size */
+        top: 5px;
+        left: 5px;
     }
 
     #game-over {
-        width: 80%;
-        padding: 20px;
+        width: 80%; /* Ensure it doesn't overflow the screen */
+        padding: 15px;
     }
 
     #game-over button {
@@ -79,4 +89,3 @@ canvas {
         padding: 10px 20px;
     }
 }
-
